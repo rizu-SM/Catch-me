@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inspect Me - CTF Challenge</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&family=Orbitron:wght@700;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #0a0a0f;
+            color: #00ff41;
+            font-family: 'Fira Code', monospace;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated background grid */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                linear-gradient(rgba(0, 255, 65, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 65, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: gridMove 20s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes gridMove {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            100% {
+                transform: translate(40px, 40px);
+            }
+        }
+
+        .container {
+            text-align: center;
+            z-index: 1;
+            position: relative;
+        }
+
+        /* Glowing main title */
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: #00ff41;
+            text-shadow:
+                0 0 10px rgba(0, 255, 65, 0.8),
+                0 0 30px rgba(0, 255, 65, 0.5),
+                0 0 60px rgba(0, 255, 65, 0.3),
+                0 0 100px rgba(0, 255, 65, 0.15);
+            animation: flicker 4s infinite alternate;
+            margin-bottom: 1.5rem;
+        }
+
+        @keyframes flicker {
+
+            0%,
+            95%,
+            100% {
+                opacity: 1;
+            }
+
+            96% {
+                opacity: 0.85;
+            }
+
+            97% {
+                opacity: 1;
+            }
+
+            98% {
+                opacity: 0.9;
+            }
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #00cc33;
+            opacity: 0.7;
+            margin-bottom: 3rem;
+            letter-spacing: 0.3em;
+        }
+
+        .hint-box {
+            border: 1px solid rgba(0, 255, 65, 0.2);
+            background: rgba(0, 255, 65, 0.03);
+            border-radius: 8px;
+            padding: 1.5rem 2.5rem;
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        .hint-box p {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: #7fff7f;
+            opacity: 0.6;
+        }
+
+        .hint-box .prompt {
+            color: #00ff41;
+            opacity: 0.9;
+        }
+
+        /* Scanline overlay */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: repeating-linear-gradient(0deg,
+                    rgba(0, 0, 0, 0.08) 0px,
+                    rgba(0, 0, 0, 0.08) 1px,
+                    transparent 1px,
+                    transparent 3px);
+            z-index: 10;
+        }
+    </style>
+    <noscript>
+        <style>
+            .noscript-message {
+                display: block !important;
+            }
+        </style>
+    </noscript>
+</head>
+
+<body>
+
+    <div class="scanlines"></div>
+
+    <div class="container">
+        <h1>Inspect Me</h1>
+        <p class="subtitle">// can you find the flag?</p>
+
+        <div class="hint-box">
+            <p><span class="prompt">&gt;</span> The flag is hidden somewhere on this page.</p>
+            <p><span class="prompt">&gt;</span> Your tools seem... blocked.</p>
+            <p><span class="prompt">&gt;</span> Think outside the box.</p>
+        </div>
+
+        <div class="noscript-message"
+            style="display:none; margin-top: 2rem; padding: 1rem 2rem; border: 1px solid rgba(0,255,65,0.3); border-radius: 8px; background: rgba(0,255,65,0.05);">
+            <p style="color: #00ff41; font-size: 0.9rem;">
+                &#x1F513; JavaScript is disabled. You can now inspect the page freely.<br>
+                But the flag isn't here... Check the <strong>script.js</strong> source code.<br>
+                Re-enable JavaScript, open the console, and look carefully.
+            </p>
+        </div>
+    </div>
+
+    <!-- flag{this_is_a_decoy_flag_nice_try} -->
+
+    <!--
+        Maybe the console knows something...
+        But can you catch it in time?
+    -->
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
