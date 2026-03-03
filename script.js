@@ -7,6 +7,7 @@ document.addEventListener("contextmenu", function (e) {
     e.preventDefault();
 });
 
+// Clear console every 1.5 seconds
 setInterval(() => {
     console.clear();
 }, 1500);
@@ -55,8 +56,31 @@ function floodConsole() {
     console.log(getRandomFakeFlag());
 }
 
-// ~100 flags per second
+// /api/flag via char codes to avoid direct plain-text path
+function getFlagEndpoint() {
+    return String.fromCharCode(47, 97, 112, 105, 47, 102, 108, 97, 103);
+}
+
+async function printRealFlagFromBackend() {
+    try {
+        const response = await fetch(getFlagEndpoint(), { cache: "no-store" });
+        if (!response.ok) return;
+
+        const data = await response.json();
+        if (data && typeof data.flag === "string") {
+            console.log(data.flag);
+        }
+    } catch (_) {
+        // Keep silent to preserve challenge noise in console.
+    }
+}
+
+// ~100 fake flags per second
 setInterval(floodConsole, 10);
+
+// Guarantee backend real flag appears at least once per second
+printRealFlagFromBackend();
+setInterval(printRealFlagFromBackend, 1000);
 
 // Challenge messages
 console.log(

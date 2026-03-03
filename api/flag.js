@@ -1,15 +1,13 @@
 export default function handler(req, res) {
-    const expected = process.env.FLAG_API_SECRET;
-    const supplied = req.headers['x-ctf-auth'];
+    const flag = process.env.FLAG;
 
-    if (!expected || supplied !== expected) {
-        return res.status(403).json({
-            flag: "flag{decoy_direct_api_access_denied}",
-            error: "forbidden"
-        });
+    res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+    res.setHeader("Pragma", "no-cache");
+    res.setHeader("Expires", "0");
+
+    if (!flag) {
+        return res.status(500).json({ error: "flag_not_configured" });
     }
 
-    return res.status(200).json({
-        flag: process.env.FLAG
-    });
+    return res.status(200).json({ flag });
 }
