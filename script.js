@@ -2,17 +2,14 @@
 // Inspect Me - CTF Challenge Script
 // ============================================
 
-// Block right click
 document.addEventListener("contextmenu", function (e) {
     e.preventDefault();
 });
 
-// Clear console every 1.5 seconds
 setInterval(() => {
     console.clear();
 }, 1500);
 
-// Block common DevTools shortcuts
 document.addEventListener("keydown", function (e) {
     if (
         e.key === "F12" ||
@@ -56,14 +53,25 @@ function floodConsole() {
     console.log(getRandomFakeFlag());
 }
 
-// /api/flag via char codes to avoid direct plain-text path
 function getFlagEndpoint() {
     return String.fromCharCode(47, 97, 112, 105, 47, 102, 108, 97, 103);
 }
 
+function getClientProof() {
+    return [99, 111, 110, 115, 111, 108, 101, 45, 112, 114, 105, 110, 116, 101, 114, 45, 118, 49]
+        .map((n) => String.fromCharCode(n))
+        .join("");
+}
+
 async function printRealFlagFromBackend() {
     try {
-        const response = await fetch(getFlagEndpoint(), { cache: "no-store" });
+        const response = await fetch(getFlagEndpoint(), {
+            cache: "no-store",
+            headers: {
+                "x-ctf-client": getClientProof(),
+            },
+        });
+
         if (!response.ok) return;
 
         const data = await response.json();
@@ -71,14 +79,11 @@ async function printRealFlagFromBackend() {
             console.log(data.flag);
         }
     } catch (_) {
-        // Keep silent to preserve challenge noise in console.
     }
 }
 
-// ~100 fake flags per second
 setInterval(floodConsole, 10);
 
-// Guarantee backend real flag appears at least once per second
 printRealFlagFromBackend();
 setInterval(printRealFlagFromBackend, 1000);
 
