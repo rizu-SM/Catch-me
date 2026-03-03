@@ -1,9 +1,15 @@
 export default function handler(req, res) {
+    const expected = process.env.FLAG_API_SECRET;
+    const supplied = req.headers['x-ctf-auth'];
 
-    const REAL_FLAG = "OMC{j4v4scr1pt_c4n_h1id3_fr0m_m3}";
+    if (!expected || supplied !== expected) {
+        return res.status(403).json({
+            flag: "flag{decoy_direct_api_access_denied}",
+            error: "forbidden"
+        });
+    }
 
-    res.status(200).json({
-        flag: REAL_FLAG
+    return res.status(200).json({
+        flag: process.env.FLAG
     });
-
 }
